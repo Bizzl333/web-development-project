@@ -1,30 +1,22 @@
 const express = require('express');
+const path = require('path');
+
 const app = express();
 const port = 3000;
 
-// middleware used to parse the data from the form
+// Middleware for parsing form data
 app.use(express.urlencoded({ extended: true }));
 
-// serve the index, contact and about .html files when the user navigates to it
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
+// Serve static files from the current directory
+app.use(express.static(path.join(__dirname)));
 
-app.get('/about', (req, res) => {
-    res.sendFile(__dirname + '/about.html');
-});
-
-app.get('/contact', (req, res) => {
-    res.sendFile(__dirname + '/contact.html');
-});
-
-// form submission on  the POST request and retrieve the values entered by user
+// Form submission on POST request and retrieve the values entered by the user
 app.post('/submit-form', (req, res) => {
-    const name = req.body.name; 
-    const email = req.body.email; 
+    const name = req.body.name;
+    const email = req.body.email;
     const message = req.body.message;
 
-    // Check if all the fields are filled correctly and display the appropriate message
+    // Check if all fields are filled correctly and display the appropriate message
     if (!name || !email || !message) {
         res.send('Error: Please enter your name, email, and message.');
     } else {
@@ -32,7 +24,7 @@ app.post('/submit-form', (req, res) => {
     }
 });
 
-// Starts the server and listens on port 3000
+// Start the server and listen on port 3000
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
